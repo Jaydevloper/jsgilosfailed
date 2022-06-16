@@ -13,7 +13,11 @@
     <div class="d-flex justify-content-between">
       <h1 class="h2">Gilos.uz/smartphones</h1>
 
-      <button class="btn btn-primary px-4" data-bs-toggle="modal" data-bs-target="#edit-student-modal" id="add">
+      <button class="btn btn-primary px-4 visually-hidden" data-bs-toggle="modal" data-bs-target="#edit-student-modal" id="add">
+        <span class="me-2">Add product</span>
+        <i class="fa-solid fa-plus"></i>
+      </button>
+      <button class="btn btn-primary px-4 " data-bs-toggle="modal" data-bs-target="#edit-student-modal"  u>
         <span class="me-2">Add product</span>
         <i class="fa-solid fa-plus"></i>
       </button>
@@ -42,7 +46,7 @@
           <div class="mb-3">
             <label for="manufacturer" class="form-label">Manufacturer</label>
             <select class="form-select" id="manufacturer">
-              <option value="0">All</option>
+              <option value="ALL">All</option>
               <!-- manufacturers array bu yerga kelishi kerak -->
             </select>
           </div>
@@ -51,8 +55,8 @@
             <label for="sortby" class="form-label">Sort by</label>
             <select class="form-select" id="sortby">
               <option value="1">Name</option>
-              <option value="2">Price: to lowest</option>
-              <option value="3">Price: to highest</option>
+              <option value="2" id="price_low">Price: to lowest</option>
+              <option value="3" id="price_height">Price: to highest</option>
             </select>
           </div>
 

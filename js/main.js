@@ -9,6 +9,13 @@ const elTitle = document.getElementById('product-title')
 const elPrice = document.getElementById('price')
 const elManfacture  = document.getElementById('product-manufacturer')
 const elBenefist = document.getElementById('benefits')
+const elFrom = document.getElementById('from')
+const elTo = document.getElementById('to')
+const elFromselect = document.getElementById('manufacturer')
+const elSort = document.getElementById('sortby')
+const elLow = document.getElementById('price_low')
+const elHeight = document.getElementById('price_height')
+const elAddproduct = document.getElementById('add_prodduct')
 elCount.textContent = `Count: ${products.length}`
 
 function create (tagName,cllasName = '',content = ''){
@@ -76,6 +83,7 @@ products.forEach(el =>{
 })
 elList.addEventListener('click', e =>{
     if (e.target.matches('#btn-danger')){
+        elList.innerHTML = ''
         const current = e.target.closest('#item').dataset.id;
         const currentId = products.findIndex(product => product.id === +current);
         products.splice(currentId,1);
@@ -117,18 +125,60 @@ elList.addEventListener('click', e =>{
         })
     }
 })
-
-products.forEach(el =>{
-    render(el);
+manufacturers.forEach(el =>{
+    const elOptionselect = create('option', '',el.name);
+    elFromselect.append(elOptionselect)
 })
+products.forEach(el =>  render(el))
+  
     elForm.addEventListener('submit', event =>{
-        elList.innerHTML = '';    
+elList.innerHTML = '';    
         products.forEach(element =>{
             const re = new RegExp(elSearch.value,'gi')
             event.preventDefault();
             if (elSearch.value && element.title.match(re)){
                  render(element);
+                }
+                else if (elFrom.value && element.price >= elFrom.value){
+                    if (!elTo.value){
+                    render(element);
+                }else if (element.price <= elTo.value){
+                    render(element);
+                }
+            }else if (elTo.value && element.price <= elTo.value){
+                if (elPrice.value >= elForm.value){
+                    render(element);
+                } else if(!elFrom.value){
+                    render(element)
+                }
+            }else if (elFromselect.value && element.model.includes(elFromselect.value)){
+                render(element);
             }
-    }) 
- })
-
+            else if (elFromselect.value == 'ALL' && elSort.value == 1 && !elTo.value && !elFrom.value && !elSearch.value){
+                render(element);
+            }
+        else if (elSort.value.includes(elLow.value) && element.price <= 500){
+                render(element);
+            } else if (elSort.value.includes(elHeight.value) && element.price >= 500){
+                render(element)
+            }
+        }) 
+       
+        
+    })
+elForms.addEventListener('submit', e =>{
+    e.preventDefault()
+    const newDate = new Date();
+    products.push({
+        id:`10${products.length}`,
+        title:`${elTitle.value}`,
+        img:`https://picsum.photos/300/200`,
+        price:`${elPrice.value}`,
+        model:`${elSelect.value}`,
+        addedDate: `${newDate.getFullYear()}/${newDate.getMonth()+1}/${newDate.getDate()}`,
+        benefits:elBenefist.value.split(',')
+    })
+    elList.innerHTML = '';
+    products.forEach(el =>  render(el))
+})
+elCount.textContent = `Count: ${products.length}`
