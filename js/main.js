@@ -81,15 +81,16 @@ products.forEach(el =>{
         elManfacture.append(elOption)
     }
 })
+const dataJson = JSON.parse(localStorage.getItem('products')) || []
 elList.addEventListener('click', e =>{
     if (e.target.matches('#btn-danger')){
         elList.innerHTML = ''
         const current = e.target.closest('#item').dataset.id;
         const currentId = products.findIndex(product => product.id === +current);
         products.splice(currentId,1);
+        localStorage.setItem('products',JSON.stringify(products))
         products.forEach(el =>{
             render(el);
-            
         })
         elCount.textContent = `Count: ${products.length}`
     } else if (e.target.matches('#btn-edit')){
@@ -101,10 +102,9 @@ elList.addEventListener('click', e =>{
         elManfacture.value = currentId.model
         elBenefist.value = currentId.benefits;
         elForms.addEventListener('submit', event =>{
+            elList.innerHTML = '';
             event.preventDefault();
-            console.log(elForms);
             if (elTitle.value.trim() && elPrice.value.trim()){
-                
                 const product  = {
                     id:currentId.id,
                     img:currentId.img,
@@ -114,10 +114,8 @@ elList.addEventListener('click', e =>{
                     price:elPrice.value,
                     benefits:elBenefist.value.split(',')
                 }
-                
                 products.splice(currentIndex,1,product);
-               
-                elList.innerHTML = '';
+                localStorage.setItem('products',JSON.stringify(products))
                 products.forEach(el =>{
                     render(el);
                 })
@@ -129,7 +127,7 @@ manufacturers.forEach(el =>{
     const elOptionselect = create('option', '',el.name);
     elFromselect.append(elOptionselect)
 })
-products.forEach(el =>  render(el))
+dataJson.forEach(el => render(el))
   
     elForm.addEventListener('submit', event =>{
 elList.innerHTML = '';    
