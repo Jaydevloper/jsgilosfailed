@@ -73,8 +73,7 @@ function render (i){
     elCardbtn.append(elBtnsecondary,elBtndanger)
     
 
-}
-products.forEach(el =>{
+}products.forEach(el =>{
     if (elManfacture.value){
         const elOption = create('option','',el.model);
         elOption.value = el.model
