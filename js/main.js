@@ -1,14 +1,18 @@
 const elList = document.getElementById('list');
 const elSelect = document.getElementById('product-manufacturer')
-const elForms = document.getElementById('btn')
+const elForms = document.getElementById('forms_edit')
 const elForm = document.getElementById('form')
+const elTitleadd = document.getElementById('product-title')
+const elPriceadd = document.getElementById('price')
+const elBenefistadd = document.getElementById('benefits')
+const elFormproduct = document.getElementById('Add_product')
 const elSearch = document.getElementById('search')
 const elCount = document.getElementById('count')
 const elAdd = document.getElementById('add')
-const elTitle = document.getElementById('product-title')
-const elPrice = document.getElementById('price')
-const elManfacture  = document.getElementById('product-manufacturer')
-const elBenefist = document.getElementById('benefits')
+const elTitle = document.getElementById('phone')
+const elPrice = document.getElementById('price_phone')
+const elManfacture  = document.getElementById('phone_manufacture')
+const elBenefist = document.getElementById('benefits_phone')
 const elFrom = document.getElementById('from')
 const elTo = document.getElementById('to')
 const elFromselect = document.getElementById('manufacturer')
@@ -36,8 +40,42 @@ function getData (data){
     const newDAta = new Date(data);
     return `${newDAta.getFullYear()}/${newDAta.getMonth() + 1}/${newDAta.getDate()}`
 }
+ 
 function render (i){
     const {title,img,price,model,addedDate,benefits,id} = i;
+    const openForm = (event) =>{
+        const currentIndex = products.findIndex(product => product.id === +current);
+        elList.innerHTML = '';
+        event.preventDefault();
+        if (elTitle.value.trim() && elPrice.value.trim()){
+            const product  = {
+                id:id,
+                img:img,
+                addedDate:addedDate,
+                model:elManfacture.value,
+                title:elTitle.value,
+                price:elPrice.value,
+                benefits:elBenefist.value.split(',')
+            }
+            products.splice(currentIndex,1,product);
+            localStorage.setItem('products',JSON.stringify(products))
+            products.forEach(el =>{
+                render(el);
+            })
+            // timedRefresh(100)
+        }
+    }
+    const openbtn = () =>{
+        elAddto.classList.add('open')
+        elClose.addEventListener('click',closebtn)
+        elBtnsecondary.removeEventListener('click',openbtn)
+        elForms.addEventListener('submit',openForm)
+    }
+    const closebtn = () => {
+        elAddto.classList.remove('open')
+        elBtnsecondary.addEventListener('click',openbtn)
+        elForms.removeEventListener('submit',openForm)
+    }
     const elItem = create('li','col-4','');
     elItem.id = 'item';
     elItem.setAttribute('data-id',id)
@@ -58,12 +96,13 @@ function render (i){
         elListcard.append(elItemcard)
     }
     const elCardbtn = create('div','position-absolute top-0 end-0 d-flex','')
-    const elBtnsecondary = elAdd.cloneNode();
-    elBtnsecondary.className = 'btn btn-outline-secondary student-edit bg-secondary'
+    const elAddto = document.querySelector('#modal-content')
+    const elClose = elAddto.querySelector('#btn-x')
+    const elBtnsecondary = create('button','btn btn-outline-secondary student-edit bg-secondary');
     elBtnsecondary.id = 'btn-edit'
+    elBtnsecondary.addEventListener('click',openbtn)
     const elBtndanger = create('button','btn rounded-0 btn-danger','')
     elBtndanger.id = 'btn-danger'
-   
     elList.append(elItem);
     elItem.append(elCard);
     elCard.append(elCardimg,elCardbody);
@@ -71,20 +110,25 @@ function render (i){
     elCardtxt.append(elMark);
     elCardtxtdel.append(elDel);
     elCardbtn.append(elBtnsecondary,elBtndanger)
-    
-
-}products.forEach(el =>{
+}
+products.forEach(el =>{
     if (elManfacture.value){
         const elOption = create('option','',el.model);
         elOption.value = el.model
         elManfacture.append(elOption)
     }
 })
+products.forEach(el =>{
+    const elOption = create('option','',el.model);
+    elSelect.append(elOption)
+})
 const dataJson = JSON.parse(localStorage.getItem('products')) || []
+products.forEach(el => render(el))
+
 elList.addEventListener('click', e =>{
+    const current = e.target.closest('#item').dataset.id;
     if (e.target.matches('#btn-danger')){
         elList.innerHTML = ''
-        const current = e.target.closest('#item').dataset.id;
         const currentId = products.findIndex(product => product.id === +current);
         products.splice(currentId,1);
         localStorage.setItem('products',JSON.stringify(products))
@@ -93,21 +137,20 @@ elList.addEventListener('click', e =>{
         })
         elCount.textContent = `Count: ${products.length}`
     } else if (e.target.matches('#btn-edit')){
-        const current = e.target.closest('#item').dataset.id;
-        const currentId = products.find(product => product.id === +current);
         const currentIndex = products.findIndex(product => product.id === +current);
-        elTitle.value = currentId.title;
-        elPrice.value = currentId.price;
-        elManfacture.value = currentId.model
-        elBenefist.value = currentId.benefits;
-        elForms.addEventListener('submit', event =>{
+        const {id,title,img,addedDate,model,benefits,price} = products[currentIndex]
+        elTitle.value =  title;
+        elPrice.value = price;
+        elManfacture.value = model
+        elBenefist.value = benefits;
+        const openForm = (event) =>{
             elList.innerHTML = '';
             event.preventDefault();
             if (elTitle.value.trim() && elPrice.value.trim()){
                 const product  = {
-                    id:currentId.id,
-                    img:currentId.img,
-                    addedDate:currentId.addedDate,
+                    id:id,
+                    img:img,
+                    addedDate:addedDate,
                     model:elManfacture.value,
                     title:elTitle.value,
                     price:elPrice.value,
@@ -118,17 +161,22 @@ elList.addEventListener('click', e =>{
                 products.forEach(el =>{
                     render(el);
                 })
+                // timedRefresh(100)
             }
-        })
+        }
+        elForms.addEventListener('submit', openForm)
     }
 })
+function timedRefresh(timeoutPeriod) {
+    setTimeout("location.reload(true);",timeoutPeriod);
+}
 manufacturers.forEach(el =>{
     const elOptionselect = create('option', '',el.name);
     elFromselect.append(elOptionselect)
 })
-dataJson.forEach(el => render(el))
+
   
-    elForm.addEventListener('submit', event =>{
+elForm.addEventListener('submit', event =>{
 elList.innerHTML = '';    
         products.forEach(element =>{
             const re = new RegExp(elSearch.value,'gi')
@@ -163,18 +211,19 @@ elList.innerHTML = '';
        
         
     })
-elForms.addEventListener('submit', e =>{
+elFormproduct.addEventListener('submit', e =>{
     e.preventDefault()
     const newDate = new Date();
     products.push({
         id:`10${products.length}`,
-        title:`${elTitle.value}`,
+        title:`${elTitleadd.value}`,
         img:`https://picsum.photos/300/200`,
-        price:`${elPrice.value}`,
+        price:`${elPriceadd.value}`,
         model:`${elSelect.value}`,
         addedDate: `${newDate.getFullYear()}/${newDate.getMonth()+1}/${newDate.getDate()}`,
-        benefits:elBenefist.value.split(',')
+        benefits:elBenefistadd.value.split(',')
     })
+    localStorage.setItem('products',JSON.stringify(products))
     elList.innerHTML = '';
     products.forEach(el =>  render(el))
 })

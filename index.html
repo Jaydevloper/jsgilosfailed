@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Zurumbia</title>
   <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/style.css">
   <script src="https://kit.fontawesome.com/1a052ad93a.js" crossorigin="anonymous"></script>
 </head>
 <body>
@@ -85,7 +86,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form action="#" method="post" id="btn" >
+          <form action="#" method="post" id="Add_product" >
             <div class="mb-3">
               <label for="product-title" class="form-label">Title</label>
               <input type="text" class="form-control" id="product-title" placeholder="Falon telefon">
@@ -116,10 +117,44 @@
             <button type="submit" class="btn btn-primary d-block w-100 p-2 border-end" id="forms">Add product</button>
           </form>
         </div>
-      </div>
+      </div>  
     </div>
   </div>
 
+ <div class="modal__dialog">
+  <div class="modal-content modal-content-edit" id="modal-content">
+    <div class="modal-header modal-header--white">
+      <h5 class="modal-title" id="editStudentModalLabel">Add product</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="btn-x"></button>
+    </div>
+    <div class="modal-body modal-body--white">
+      <form action="#" method="post" id="forms_edit" >
+        <div class="mb-3">
+          <label for="product-title" class="form-label">Title</label>
+          <input type="text" class="form-control" id="phone" placeholder="Falon telefon">
+        </div>
+        <div class="mb-3">
+          <label for="price" class="form-label">Narxi</label>
+          <input type="number" class="form-control" id="price_phone" placeholder="12400000">
+        </div>
+        <div class="mb-3">
+          <label for="product-manufacturer" class="form-label">Manufacturer</label>
+          <select class="form-select" id="phone_manufacture">
+            <option selected disabled value="0">Select a manufacturer</option>
+            <!-- manufacturers array bu yerga kelishi kerak -->
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="benefits" class="form-label">Benefits</label>
+          <input type="text" class="form-control" id="benefits_phone" placeholder="150">
+
+        </div>
+        <button type="submit" class="btn btn-primary d-block w-100 p-2 border-end" id="edit">Edit</button>
+      </form>
+    </div>
+  </div>
+ </div>
   <script src="js/bootstrap.bundle.min.js"></script>
 
   <script src="js/data.js"></script>

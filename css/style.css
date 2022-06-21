@@ -1,0 +1,29 @@
+.modal-content-edit {
+    display: none;
+
+}
+.modal__dialog{
+    position: fixed;
+    top: -638px;
+    right: calc(50% - 1004px);
+}
+.open{
+    display: block;
+    background-color: #80808082;
+    padding: 800px;
+    animation: modal 0.5s ease alternate;
+}
+.modal-body--white{
+    background-color: #fff;
+}
+.modal-header--white{
+    background-color: #fff;
+}
+#phone{
+    width: 500px;
+}
+@keyframes modal{
+    from{
+        transform: translateY(-100px);
+    }
+}
