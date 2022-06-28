@@ -22,6 +22,7 @@ const elHeight = document.getElementById('price_height')
 const elAddproduct = document.getElementById('add_prodduct')
 elCount.textContent = `Count: ${products.length}`
 
+const dataJson = JSON.parse(localStorage.getItem('products')) || []
 function create (tagName,cllasName = '',content = ''){
     const element = document.createElement(tagName);
     if (cllasName){
@@ -111,19 +112,18 @@ function render (i){
     elCardtxtdel.append(elDel);
     elCardbtn.append(elBtnsecondary,elBtndanger)
 }
-products.forEach(el =>{
+dataJson.forEach(el =>{
     if (elManfacture.value){
         const elOption = create('option','',el.model);
         elOption.value = el.model
         elManfacture.append(elOption)
     }
 })
-products.forEach(el =>{
+dataJson.forEach(el =>{
     const elOption = create('option','',el.model);
     elSelect.append(elOption)
 })
-const dataJson = JSON.parse(localStorage.getItem('products')) || []
-products.forEach(el => render(el))
+dataJson.forEach(el => render(el))
 
 elList.addEventListener('click', e =>{
     const current = e.target.closest('#item').dataset.id;
@@ -132,9 +132,10 @@ elList.addEventListener('click', e =>{
         const currentId = products.findIndex(product => product.id === +current);
         products.splice(currentId,1);
         localStorage.setItem('products',JSON.stringify(products))
-        products.forEach(el =>{
+        dataJson.forEach(el =>{
             render(el);
         })
+        timedRefresh(100)
         elCount.textContent = `Count: ${products.length}`
     } else if (e.target.matches('#btn-edit')){
         const currentIndex = products.findIndex(product => product.id === +current);
@@ -158,10 +159,10 @@ elList.addEventListener('click', e =>{
                 }
                 products.splice(currentIndex,1,product);
                 localStorage.setItem('products',JSON.stringify(products))
-                products.forEach(el =>{
+                dataJson.forEach(el =>{
                     render(el);
                 })
-                // timedRefresh(100)
+                timedRefresh(100)
             }
         }
         elForms.addEventListener('submit', openForm)
@@ -228,3 +229,18 @@ elFormproduct.addEventListener('submit', e =>{
     products.forEach(el =>  render(el))
 })
 elCount.textContent = `Count: ${products.length}`
+
+// function add(){
+//     console.log(this.x+this.y);
+   
+// }
+// function remove(){
+//     console.log(this.x-this.y);
+// }
+
+// const obj = {
+//     x:5,
+//     y:7
+// } 
+// add.call(obj);
+// remove.call(obj)

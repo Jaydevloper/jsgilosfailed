@@ -1,4 +1,5 @@
-const products = [
+const products = JSON.parse(localStorage.getItem('products'))
+|| [
   {
     id: 100,
     title: "Samgung Note 20 Ultra",
@@ -29,7 +30,6 @@ const products = [
   
   
 ]
-
 const manufacturers = [
   {
     id: 1,
